@@ -369,7 +369,7 @@ _format_trust_error(task, dependency_chain) := error if {
 	error := {
 		"msg": sprintf(
 			# regal ignore:line-length
-			"Untrusted version of PipelineTask %q (Task %q) was included in build chain comprised of: %s. Please upgrade the task version to: %s",
+			"Untrusted version of PipelineTask HAHAHAHAHAAH %q (Task %q) was included in build chain comprised of: %s. Please upgrade the task version to: %s",
 			[untrusted_pipeline_task_name, untrusted_task_name, concat(", ", dependency_chain), latest_trusted_ref],
 		),
 		"term": untrusted_task_name,
