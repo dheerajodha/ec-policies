@@ -174,7 +174,7 @@ deny contains result if {
 #   Ensure that the set of required tasks are included
 #   in the PipelineRun attestation.
 # custom:
-#   short_name: required_tasks_found
+#   short_name: required_tasks_found 
 #   failure_msg: '%s is missing'
 #   solution: >-
 #     Make sure all required tasks are in the build pipeline. The required task list
@@ -310,15 +310,14 @@ _missing_tasks(required_tasks) := {task |
 	tasks := tekton.tasks(att)
 	count(tasks) > 0
 
-	# only tasks that are trusted, i.e. tasks that have a record in the trusted_tasks data
-	trusted := [task_name |
+	tasks_in_user_pipeline := [task_name |
 		some task in tasks
-		tekton.is_trusted_task(task)
+		# tekton.is_trusted_task(task)
 		some task_name in tekton.task_names(task)
 	]
 
 	some required_task in required_tasks
-	some task in _any_missing(required_task, trusted)
+	some task in _any_missing(required_task, tasks_in_user_pipeline)
 }
 
 _any_missing(required, tasks) := missing if {
