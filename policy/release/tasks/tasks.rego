@@ -155,6 +155,7 @@ deny contains result if {
 #
 deny contains result if {
 	some required_task in _missing_tasks(current_required_tasks.tasks)
+	print("missing_task", required_task)
 
 	# Don't report an error if a task is required now, but not in the future
 	required_task in latest_required_tasks.tasks
@@ -182,15 +183,19 @@ deny contains result if {
 
 	# flatten into a single array of strings
 	flattened_required_tasks := flatten_list_to_sorted_array(required_task_names)
+	print("flattened_required_tasks", flattened_required_tasks)
+
+	untrusted_tasks := tekton.untrusted_task_refs(lib.tasks_from_pipelinerun)
 
 	some att in lib.pipelinerun_attestations
-	some untrusted_task in tekton.untrusted_task_refs(lib.tasks_from_pipelinerun)
+	some untrusted_task in untrusted_tasks
 
 	# Check if any untrusted task matches a required task
 	some required_task_name in flattened_required_tasks
 	some untrusted_task_name in tekton.task_names(untrusted_task)
 
 	untrusted_task_name == required_task_name
+	print("untrusted_task_name", untrusted_task_name)
 	result := lib.result_helper_with_term(
 		rego.metadata.chain(),
 		[_format_missing(untrusted_task_name, false)],
@@ -310,6 +315,7 @@ deny contains result if {
 # _missing_tasks returns a set of task names that are in the given
 # required_tasks, but not in the PipelineRun attestation.
 _missing_tasks(required_tasks) := {task |
+	print("required_tasks", required_tasks)
 	some att in lib.pipelinerun_attestations
 
 	# all tasks on a PipelineRun

@@ -236,6 +236,7 @@ deny contains result if {
 
 _trust_errors contains error if {
 	_uses_trusted_artifacts
+	print("USING TA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 	some attestation in lib.pipelinerun_attestations
 	build_tasks := tekton.build_tasks(attestation)
 	test_tasks := tekton.tasks_output_result(attestation)
@@ -257,6 +258,7 @@ _trust_errors contains error if {
 
 _trust_errors contains error if {
 	not _uses_trusted_artifacts
+	print("NOT using TA!!!!#################################################################################################################!")
 	some task in tekton.untrusted_task_refs(lib.tasks_from_pipelinerun)
 	error := {
 		"msg": sprintf(
